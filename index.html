@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>متتالية الأعداد من 0 إلى 69</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial;background:linear-gradient(135deg,#fff8e8,#e8f8ff);color:#243247}
+header{background:linear-gradient(110deg,#48b9df,#168fc5);color:#fff;text-align:center;padding:24px 12px;border-radius:0 0 28px 28px}
+header h1{font-size:clamp(24px,5vw,38px);margin:0}header p{margin:8px 0 0;font-size:18px}
+main{max-width:1050px;margin:20px auto;padding:0 14px}.stats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px}.stat{background:#fff;border-radius:15px;padding:10px 18px;box-shadow:0 3px 12px #0001;font-weight:bold}
+.tabs{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin:18px 0}.tab,.btn{border:0;border-radius:14px;padding:12px 18px;font-size:16px;font-weight:bold;cursor:pointer}.tab{background:white;color:#3b5366}.tab.active{background:#36a9d4;color:#fff}
+.panel{background:#fff;border-radius:24px;padding:clamp(16px,4vw,28px);box-shadow:0 8px 25px #4b657a12;margin-bottom:20px}h2{color:#e77935;margin-top:0}
+.q{font-size:clamp(21px,4vw,29px);line-height:1.7;text-align:center;background:#fff7eb;border:2px dashed #ffc17e;padding:20px;border-radius:20px;margin:14px 0}
+.read{display:block;margin:12px auto;background:#8b63c6;color:white}.btn{background:#ff9f43;color:white}.blue{background:#39afd3}.green{background:#50b77b}.purple{background:#9365c1}
+.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin:20px 0}.answer{border:2px solid #dceaf1;background:#f7fcff;border-radius:16px;padding:17px;font-size:24px;font-weight:bold;cursor:pointer}.answer.correct{background:#dff8e8;border-color:#48b878}.answer.wrong{background:#ffe4e4;border-color:#ed7777}
+.feedback{text-align:center;font-size:20px;font-weight:bold;min-height:32px;margin:12px}.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.hidden{display:none}
+.strip{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;margin:15px auto;max-width:780px}.cell{width:39px;height:39px;border:1px solid #9bcbd8;display:grid;place-items:center;font-weight:bold;background:#e6f8ff;border-radius:5px}.cell.yellow{background:#fff2a8}.cell.bluecell{background:#bcefff}.cell.orange{background:#ffc29b}.cell.green{background:#9ce2ac}.cell.pink{background:#ffd1e7}
+input{font-size:22px;padding:10px;border:2px solid #cbdde8;border-radius:12px;width:130px;text-align:center}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.card{background:#fff8ed;border:2px solid #ffe0b8;border-radius:18px;padding:16px;text-align:center}.card h3{color:#b9672e;margin:4px}
+footer{text-align:center;color:#718096;padding:20px}
+</style></head><body>
+<header><h1>🔢 متتالية الأعداد من 0 إلى 69</h1><p>نتعلّم الأعداد، نرتّبها، ونكتبها بالأرقام والحروف!</p></header>
+<main><div class="stats"><div class="stat">⭐ النقاط: <span id="score">0</span></div><div class="stat">🎯 الصحيحة: <span id="right">0</span></div><div class="stat">📘 مجال الدرس: 0 إلى 69</div></div>
+<div class="tabs"><button class="tab active" onclick="show('discover',this)">🟦 اكتشف</button><button class="tab" onclick="show('practice',this)">🟧 أنجز</button><button class="tab" onclick="show('games',this)">🎮 ألعاب</button></div>
+<section id="discover" class="panel"><h2>🟩 اكتشف شريط الأعداد</h2><p>اضغط على زر الاستماع، ثم أجب عن السؤال.</p><div class="strip" id="strip"></div>
+<div class="q" id="dq"></div><button class="btn read" onclick="speakD()">🔊 اضغط لسماع السؤال</button><div class="answers" id="da"></div><div class="feedback" id="df"></div><div class="actions"><button class="btn" onclick="newDiscover()">سؤال جديد ↻</button></div></section>
+<section id="practice" class="panel hidden"><h2>🟧 أنجز تمارين الدرس</h2>
+<div class="q" id="pq"></div><button class="btn read" onclick="speakP()">🔊 استمع إلى السؤال</button><div style="text-align:center"><input id="pans" type="number" min="0" max="69" placeholder="الإجابة"><button class="btn green" onclick="checkP()">تحقّق</button></div><div class="feedback" id="pf"></div><div class="actions"><button class="btn blue" onclick="newPractice()">تمرين آخر ↻</button></div>
+<hr><h3>✍️ اكتب العدد بالحروف</h3><div class="q" id="wordq"></div><button class="btn read" onclick="speakWord()">🔊 اسمع العدد</button><div class="cards"><div class="card"><input id="wordans" placeholder="اكتب بالحروف" style="width:90%"><p><button class="btn purple" onclick="checkWord()">تحقّق</button></p><div id="wordfb" class="feedback"></div></div></div></section>
+<section id="games" class="panel hidden"><h2>🎮 ألعاب الأعداد</h2><div class="cards">
+<div class="card"><h3>🚗 رتّب الأعداد من الأصغر إلى الأكبر</h3><p id="orderq"></p><button class="btn read" onclick="speakOrder()">🔊 اسمع الأعداد</button><div style="font-size:20px" id="orderhint"></div><input id="orderans" placeholder="مثال: 12، 20..." style="width:95%"><p><button class="btn" onclick="checkOrder()">تحقّق</button> <button class="btn blue" onclick="newOrder()">جولة جديدة</button></p><div id="orderfb" class="feedback"></div></div>
+<div class="card"><h3>🧩 العدد السابق والعدد التالي</h3><div class="q" id="neighborq"></div><button class="btn read" onclick="speakNeighbor()">🔊 اسمع السؤال</button><p>السابق: <input id="prev" type="number" style="width:75px"> التالي: <input id="next" type="number" style="width:75px"></p><button class="btn green" onclick="checkNeighbor()">تحقّق</button> <button class="btn blue" onclick="newNeighbor()">سؤال جديد</button><div id="neighborfb" class="feedback"></div></div>
+<div class="card"><h3>🎯 أكمل المتتالية</h3><div class="q" id="seq"></div><button class="btn read" onclick="speakSeq()">🔊 اسمع المتتالية</button><input id="seqans" type="number" placeholder="العدد الناقص"><p><button class="btn" onclick="checkSeq()">تحقّق</button> <button class="btn blue" onclick="newSeq()">متتالية جديدة</button></p><div id="seqfb" class="feedback"></div></div></div></section>
+</main><footer>🌟 بالتدرّب نُتقن الأعداد من 0 إلى 69!</footer>
+<script>
+let score=0,right=0,D=null,P=null,W=null,O=null,N=null,S=null;
+function say(t){if(!('speechSynthesis'in window)){alert('القراءة الصوتية غير مدعومة');return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';u.rate=.85;speechSynthesis.speak(u)}
+function show(id,b){document.querySelectorAll('section').forEach(s=>s.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active')}
+function update(){scoreEl.textContent=score;rightEl.textContent=right}const scoreEl=document.getElementById('score'),rightEl=document.getElementById('right');
+function win(f,msg,ok){f.textContent=msg;if(ok){score++;right++;update()}}
+function shuffle(a){return a.sort(()=>Math.random()-.5)}
+// شريط الأعداد من 0 إلى 69
+let strip=document.getElementById('strip');for(let i=0;i<70;i++){let c=document.createElement('div');c.className='cell '+(i<10?'yellow':i<20?'bluecell':i<30?'orange':i<40?'green':i<50?'pink':'');c.textContent=i;strip.appendChild(c)}
+function newDiscover(){let n=Math.floor(Math.random()*70),type=Math.floor(Math.random()*3);D={n,type};let text=type===0?`ما العدد الذي يأتي بعد ${n===69?68:n}؟`:type===1?`ما العدد الذي يأتي قبل ${n===0?1:n}؟`:`أين يوجد العدد ${n} في شريط الأعداد؟`;if(type===0&&n===69)D.ans=69;else if(type===0)D.ans=n+1;else if(type===1)D.ans=n===0?0:n-1;else D.ans=n;document.getElementById('dq').textContent=text;document.getElementById('df').textContent='';let opts=new Set([D.ans]);while(opts.size<4)opts.add(Math.max(0,Math.min(69,D.ans+Math.floor(Math.random()*9)-4)));let a=document.getElementById('da');a.innerHTML='';shuffle([...opts]).forEach(v=>{let b=document.createElement('button');b.className='answer';b.textContent=v;b.onclick=()=>{if(a.dataset.done)return;a.dataset.done=1;if(v===D.ans){b.classList.add('correct');win(document.getElementById('df'),'🎉 أحسنت! إجابة صحيحة',true)}else{b.classList.add('wrong');win(document.getElementById('df'),'الإجابة الصحيحة: '+D.ans,false);[...a.children].forEach(x=>{if(+x.textContent===D.ans)x.classList.add('correct')})}};a.appendChild(b)});a.dataset.done=''}
+function speakD(){say(document.getElementById('dq').textContent)}
+function newPractice(){let n=Math.floor(Math.random()*68)+1;P={n,ans:Math.random()>.5?n-1:n+1};document.getElementById('pq').textContent=P.ans===n-1?`اكتب العدد الذي يسبق ${n}.`:`اكتب العدد الذي يلي ${n}.`;document.getElementById('pans').value='';document.getElementById('pf').textContent='';W=Math.floor(Math.random()*70);document.getElementById('wordq').textContent='اكتب العدد '+W+' بالحروف.';document.getElementById('wordans').value='';document.getElementById('wordfb').textContent=''}
+function speakP(){say(document.getElementById('pq').textContent)}function checkP(){let v=+pans.value;win(pf,v===P.ans?'🌟 صحيح!':'حاول ثانية، الإجابة '+P.ans,v===P.ans)}
+function speakWord(){say('اكتب العدد '+W+' بالحروف')}
+const words=['صفر','واحد','اثنان','ثلاثة','أربعة','خمسة','ستة','سبعة','ثمانية','تسعة','عشرة'];
+function arNum(n){if(n<11)return words[n];let units=n%10,tens=Math.floor(n/10);let tw=['','عشرة','عشرون','ثلاثون','أربعون','خمسون','ستون'];if(n<20){let u=n-10;return u===1?'أحد عشر':u===2?'اثنا عشر':words[u]+' عشر'}if(units===0)return tw[tens];return words[units]+' و'+tw[tens]}
+function checkWord(){let val=wordans.value.trim().replace(/\s+/g,' '),correct=arNum(W);win(wordfb,val===correct?'👏 ممتاز!':'الإجابة النموذجية: '+correct,val===correct)}
+function newOrder(){let a=shuffle(Array.from({length:5},()=>Math.floor(Math.random()*69)+1));O={a,sorted:[...a].sort((x,y)=>x-y)};orderq.textContent='رتّب هذه الأعداد: '+a.join(' - ');orderhint.textContent='';orderans.value='';orderfb.textContent=''}
+function speakOrder(){say('رتب الأعداد من الأصغر إلى الأكبر: '+O.a.join('، '))}
+function checkOrder(){let vals=orderans.value.split(/[،, ]+/).filter(Boolean).map(Number);let ok=vals.length===5&&vals.every((v,i)=>v===O.sorted[i]);win(orderfb,ok?'🏆 ترتيب صحيح!':'الترتيب الصحيح: '+O.sorted.join('، '),ok)}
+function newNeighbor(){let n=Math.floor(Math.random()*68)+1;N=n;neighborq.textContent='اكتب العدد السابق والعدد التالي للعدد '+n+'.';prev.value='';next.value='';neighborfb.textContent=''}
+function speakNeighbor(){say(neighborq.textContent)}function checkNeighbor(){let ok=+prev.value===N-1&&+next.value===N+1;win(neighborfb,ok?'🌟 رائع!':'السابق '+(N-1)+'، التالي '+(N+1),ok)}
+function newSeq(){let start=Math.floor(Math.random()*55),step=Math.random()>.5?1:2,missing=start+step*3;S={missing};seq.textContent=[start,start+step,start+2*step,'؟',start+4*step].join(' ، ');seqans.value='';seqfb.textContent=''}
+function speakSeq(){say('أكمل المتتالية: '+seq.textContent)}function checkSeq(){let ok=+seqans.value===S.missing;win(seqfb,ok?'🎊 ممتاز!':'العدد الناقص هو '+S.missing,ok)}
+newDiscover();newPractice();newOrder();newNeighbor();newSeq();
+</script></body></html>
